@@ -26,8 +26,7 @@ from trac.util import as_int, to_unicode
 from trac.util.html import html, escape
 from trac.util.presentation import classes
 from trac.util.translation import _, tag_
-from trac.web.api import IRequestFilter, IRequestHandler, \
-                         ITemplateStreamFilter
+from trac.web.api import IRequestFilter, IRequestHandler
 from trac.web.chrome import ITemplateProvider, add_ctxtnav, add_script
 
 from model import TicketLinks
@@ -36,8 +35,7 @@ from model import TicketLinks
 class MasterTicketsModule(Component):
     """Provides support for ticket dependencies."""
 
-    implements(IRequestFilter, IRequestHandler, ITemplateProvider,
-               ITemplateStreamFilter)
+    implements(IRequestFilter, IRequestHandler, ITemplateProvider)
 
     dot_path = Option('mastertickets', 'dot_path', default='dot',
         doc="Path to the dot executable.")
