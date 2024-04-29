@@ -29,7 +29,7 @@ from trac.util.translation import _, tag_
 from trac.web.api import IRequestFilter, IRequestHandler
 from trac.web.chrome import ITemplateProvider, add_ctxtnav, add_script
 
-from model import TicketLinks
+from mastertickets.model import TicketLinks
 
 
 class MasterTicketsModule(Component):
