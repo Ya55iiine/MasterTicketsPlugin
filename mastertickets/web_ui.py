@@ -313,7 +313,8 @@ class MasterTicketsModule(Component):
         g = graphviz.Graph('self.log')
         g.label_summary = label_summary
 
-        g.attributes['rankdir'] = self.graph_direction
+        # g.attributes['rankdir'] = self.graph_direction
+        g['rankdir'] = self.graph_direction
 
         node_default = g['node']
         node_default['style'] = 'filled'
