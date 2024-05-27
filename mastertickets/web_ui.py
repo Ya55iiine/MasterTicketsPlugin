@@ -316,11 +316,12 @@ class MasterTicketsModule(Component):
         # g.attributes['rankdir'] = self.graph_direction
         g.graph_attr['rankdir'] = self.graph_direction
 
-        node_default = g['node']
-        node_default['style'] = 'filled'
+        # node_default = g['node']
+        # node_default['style'] = 'filled'
+        g.node_attr['style'] = 'filled'
 
-        edge_default = g['edge']
-        edge_default['style'] = ''
+        # edge_default = g['edge']
+        # edge_default['style'] = ''
 
         # Force this to the top of the graph
         for tid in tkt_ids:
