@@ -145,4 +145,4 @@ class TicketLinks(object):
                 visit(tid, memo1, lambda links: links.blocking)
                 visit(tid, memo2, lambda links: links.blocked_by)
         memo1.update(memo2)
-        return memo1.itervalues()
+        return memo1.items()
