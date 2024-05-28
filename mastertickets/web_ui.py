@@ -324,7 +324,7 @@ class MasterTicketsModule(Component):
         # edge_default['style'] = ''
         g.edge_attr['style'] = ''
 
-        env.log.debug("*** Hey, varname is %r ***", tkt_ids)
+        self.log.debug("*** Hey, varname is %r ***", tkt_ids)
 
         # Force this to the top of the graph
         for tid in tkt_ids:
