@@ -322,10 +322,14 @@ class MasterTicketsModule(Component):
 
         # edge_default = g['edge']
         # edge_default['style'] = ''
+        g.edge_attr['style'] = ''
+
+        env.log.debug("*** Hey, varname is %r ***", tkt_ids)
 
         # Force this to the top of the graph
         for tid in tkt_ids:
-            g[tid]
+            # g[tid]
+            g.graph_attr[tid]
 
         if self.show_key:
             g[-1]['label'] = self.closed_text
