@@ -340,6 +340,7 @@ class MasterTicketsModule(Component):
         links = sorted(links)
         # links = sorted(links, key=lambda link: link.tkt.id)
         for link in links:
+            console.log(links,link)
             tkt = link.tkt
             node = g[tkt.id]
             if label_summary:
