@@ -15,6 +15,7 @@ import os
 import re
 import subprocess
 import textwrap
+import sys
 
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
 from trac.core import Component, TracError, implements
@@ -340,7 +341,7 @@ class MasterTicketsModule(Component):
         links = sorted(links)
         # links = sorted(links, key=lambda link: link.tkt.id)
         for link in links:
-            console.log(links,link)
+            print (link)
             tkt = link.tkt
             node = g[tkt.id]
             if label_summary:
