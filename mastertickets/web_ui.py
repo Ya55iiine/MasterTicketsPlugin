@@ -337,7 +337,8 @@ class MasterTicketsModule(Component):
             g[-2]['shape'] = 'box'
 
         links = TicketLinks.walk_tickets(self.env, tkt_ids, self.full_graph)
-        links = sorted(links, key=lambda link: link.tkt.id)
+        links = sorted(links)
+        # links = sorted(links, key=lambda link: link.tkt.id)
         for link in links:
             tkt = link.tkt
             node = g[tkt.id]
