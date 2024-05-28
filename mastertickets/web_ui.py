@@ -325,11 +325,11 @@ class MasterTicketsModule(Component):
         g.edge_attr['style'] = ''
 
         # Force this to the top of the graph
-        for tid in tkt_ids:
-            g.body[tid]
+        # for tid in tkt_ids:
+        #     g.body[tid]
 
         if self.show_key:
-            g.body[-1].graph_attr['label'] = self.closed_text
+            g[-1]['label'] = self.closed_text
             g[-1]['fillcolor'] = self.closed_color
             g[-1]['shape'] = 'box'
             g[-2]['label'] = self.opened_text
