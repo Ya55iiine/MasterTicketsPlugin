@@ -145,5 +145,5 @@ class TicketLinks(object):
                 visit(tid, memo1, lambda links: links.blocking)
                 visit(tid, memo2, lambda links: links.blocked_by)
         memo1.update(memo2)
-        self.log.debug("Hey, varname is %r", memo1)
+        env.log.debug("Hey, varname is %r", memo1)
         return memo1.items()
