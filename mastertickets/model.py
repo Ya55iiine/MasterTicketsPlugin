@@ -130,7 +130,6 @@ class TicketLinks(object):
                 return False
 
             links = TicketLinks(env, tkt)
-            self.log.debug("Hey, varname is %r", links)
             memo[tkt] = links
 
             for n in next_fn(links):
