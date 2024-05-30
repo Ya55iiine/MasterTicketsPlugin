@@ -313,6 +313,9 @@ class MasterTicketsModule(Component):
             data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
 
+            if isinstance(data, str): 
+                data = {'data': data}
+
             #return 'depgraph.html', data, None
             return {'template': 'depgraph.html', 'data': data, 'metadata': {}}
 
