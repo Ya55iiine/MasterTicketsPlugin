@@ -282,7 +282,7 @@ class MasterTicketsModule(Component):
             else:
                 img = g.render(self.dot_path)
             req.send(img, 'image/png')
-            return (), {}, {}
+            return none, {}, {}
         else:
             data = {}
 
