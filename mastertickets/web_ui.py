@@ -330,12 +330,15 @@ class MasterTicketsModule(Component):
         #     g.body[tid]
 
         if self.show_key:
-            g[-1]['label'] = self.closed_text
-            g[-1]['fillcolor'] = self.closed_color
-            g[-1]['shape'] = 'box'
-            g[-2]['label'] = self.opened_text
-            g[-2]['fillcolor'] = self.opened_color
-            g[-2]['shape'] = 'box'
+            # g[-1]['label'] = self.closed_text
+            # g[-1]['fillcolor'] = self.closed_color
+            # g[-1]['shape'] = 'box'
+            # g[-2]['label'] = self.opened_text
+            # g[-2]['fillcolor'] = self.opened_color
+            # g[-2]['shape'] = 'box'
+            g.node('key_closed', label=self.closed_text, fillcolor=self.closed_color, shape='box')
+            g.node('key_opened', label=self.opened_text, fillcolor=self.opened_color, shape='box')
+
 
         links = TicketLinks.walk_tickets(self.env, tkt_ids, self.full_graph)
         # links = sorted(links)
