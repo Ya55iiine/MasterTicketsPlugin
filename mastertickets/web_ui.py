@@ -339,7 +339,7 @@ class MasterTicketsModule(Component):
 
         links = TicketLinks.walk_tickets(self.env, tkt_ids, self.full_graph)
         # links = sorted(links)
-        links = sorted(links, key=lambda link: link.tkt.id)
+        links = sorted(links, key=lambda item: item[1].tkt.id)
         for link in links:
             #tkt = link.tkt
             node = g[link.tkt.id]
