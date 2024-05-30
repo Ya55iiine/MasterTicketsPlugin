@@ -340,13 +340,14 @@ class MasterTicketsModule(Component):
         links = TicketLinks.walk_tickets(self.env, tkt_ids, self.full_graph)
         # links = sorted(links)
         links = sorted(links, key=lambda item: item[1].tkt.id)
-        for link in links:
+        for ticket_id, link in links:
             #tkt = link.tkt
-            node = g[link.tkt.id]
+            #node = g[link.tkt.id]
+            node = g[ticket_id]
             if label_summary:
-                label = u'#%s %s' % (tkt.id, tkt['summary'])
+                label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
             else:
-                label = u'#%s' % tkt.id
+                label = u'#%s' % link.tkt.id
             node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
             node['fillcolor'] = tkt['status'] == 'closed' and \
                                 self.closed_color or self.opened_color
