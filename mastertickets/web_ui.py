@@ -343,23 +343,25 @@ class MasterTicketsModule(Component):
         for ticket_id, link in links:
             #tkt = link.tkt
             #node = g[link.tkt.id]
-            node = g[str(ticket_id)]
+            g[str(ticket_id)] = {'label': ''}
             if label_summary:
                 label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
             else:
                 label = u'#%s' % link.tkt.id
-            node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
-            node['fillcolor'] = tkt['status'] == 'closed' and \
+            g[str(ticket_id)]['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
+            g[str(ticket_id)]['fillcolor'] = tkt['status'] == 'closed' and \
                                 self.closed_color or self.opened_color
-            node['URL'] = req.href.ticket(tkt.id)
-            node['alt'] = u'Ticket #%s' % tkt.id
-            node['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
+            g[str(ticket_id)]['URL'] = req.href.ticket(tkt.id)
+            g[str(ticket_id)]['alt'] = u'Ticket #%s' % tkt.id
+            g[str(ticket_id)]['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
                                                       tkt['summary']))
             if self.highlight_target and tkt.id in tkt_ids:
-                node['penwidth'] = 3
+                #node['penwidth'] = 3
+                g[str(ticket_id)]['penwidth'] = 3
 
             for n in link.blocking:
-                node > g[n]
+                #node > g[n]
+                g.edge(str(ticket_id), str(n))
 
         return g
 
