@@ -314,9 +314,7 @@ class MasterTicketsModule(Component):
             data['use_gs'] = self.use_gs
 
             #return 'depgraph.html', data, None
-            data['pretty_dateinfo'] = {}
-            data['dateinfo'] = {}
-            return {'template': 'depgraph.html', 'data': data, 'metadata': {}}
+            return 'depgraph.html', data, {}
 
     def _build_graph(self, req, tkt_ids, label_summary=0):
         # g = graphviz.Graph(log=self.log)
