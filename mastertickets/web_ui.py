@@ -217,6 +217,8 @@ class MasterTicketsModule(Component):
         realm = req.args['realm']
         id_ = req.args['id']
 
+        g, _, _ = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
+
         if not which(self.dot_path):
             raise TracError(_("Path to dot executable is invalid: %(path)s",
                               path=self.dot_path))
