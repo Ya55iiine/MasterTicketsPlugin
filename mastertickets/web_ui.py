@@ -217,8 +217,6 @@ class MasterTicketsModule(Component):
         realm = req.args['realm']
         id_ = req.args['id']
 
-        g, _, _ = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
-
         if not which(self.dot_path):
             raise TracError(_("Path to dot executable is invalid: %(path)s",
                               path=self.dot_path))
@@ -245,7 +243,9 @@ class MasterTicketsModule(Component):
         if 'summary' in req.args:
             label_summary = int(req.args.get('summary'))
 
-        g = self._build_graph(req, tkt_ids, label_summary=label_summary)
+        # g = self._build_graph(req, tkt_ids, label_summary=label_summary)
+        g, _, _ = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
+        
         if req.path_info.endswith('/depgraph') or 'format' in req.args:
             format_ = req.args.get('format')
             if format_ == 'text':
