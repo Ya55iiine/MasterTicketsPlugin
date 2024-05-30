@@ -313,11 +313,8 @@ class MasterTicketsModule(Component):
             data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
 
-            if isinstance(data, str): 
-                data = {'data': data}
-
             #return 'depgraph.html', data, None
-            return {'template': 'depgraph.html', 'data': data, 'metadata': {}}
+            return {'template': 'depgraph.html', 'data': {'my_data': data}, 'metadata': {}}
 
     def _build_graph(self, req, tkt_ids, label_summary=0):
         # g = graphviz.Graph(log=self.log)
