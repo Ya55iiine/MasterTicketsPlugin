@@ -343,21 +343,29 @@ class MasterTicketsModule(Component):
         for ticket_id, link in links:
             #tkt = link.tkt
             #node = g[link.tkt.id]
-            node = g.node(str(ticket_id))
-            if label_summary:
-                label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
-            else:
-                label = u'#%s' % link.tkt.id
-            node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
-            node['fillcolor'] = tkt['status'] == 'closed' and \
-                                self.closed_color or self.opened_color
-            node['URL'] = req.href.ticket(tkt.id)
-            node['alt'] = u'Ticket #%s' % tkt.id
-            node['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
-                                                      tkt['summary']))
+            # node = g.node(str(ticket_id))
+            # if label_summary:
+            #     label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
+            # else:
+            #     label = u'#%s' % link.tkt.id
+            # node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
+            # node['fillcolor'] = tkt['status'] == 'closed' and \
+            #                     self.closed_color or self.opened_color
+            # node['URL'] = req.href.ticket(tkt.id)
+            # node['alt'] = u'Ticket #%s' % tkt.id
+            # node['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
+            #                                           tkt['summary']))
+            g.node(str(ticket_id), 
+               label= u'#%s %s' % (link.tkt.id, link.tkt['summary']) if label_summary 
+                      else u'#%s' % link.tkt.id,
+               fillcolor=self.closed_color if link.tkt['status'] == 'closed' else self.opened_color,
+               URL=req.href.ticket(link.tkt.id),
+               alt=u'Ticket #%s' % link.tkt.id,
+               tooltip=escape('#%s (%s) %s' % (link.tkt.id, link.tkt['status'], link.tkt['summary']))
+              )
             if self.highlight_target and link.tkt.id in tkt_ids:
                 #node['penwidth'] = 3
-                node['penwidth'] = 3
+                g.node(str(ticket_id))['penwidth'] = 3
 
             for n in link.blocking:
                 #node > g[n]
