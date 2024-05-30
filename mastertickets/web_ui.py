@@ -343,7 +343,7 @@ class MasterTicketsModule(Component):
         for ticket_id, link in links:
             #tkt = link.tkt
             #node = g[link.tkt.id]
-            node = g[ticket_id]
+            node = g.node(str(ticket_id))
             if label_summary:
                 label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
             else:
