@@ -252,6 +252,7 @@ class MasterTicketsModule(Component):
                 # In case g.__str__ returns unicode, convert it in ascii
                 req.send(to_unicode(g).encode('ascii', 'replace'),
                          'text/plain')
+                return None, {}, {}
             elif format_ == 'debug':
                 import pprint
                 req.send(
@@ -259,11 +260,13 @@ class MasterTicketsModule(Component):
                         [TicketLinks(self.env, tkt_id) for tkt_id in tkt_ids]
                     ),
                     'text/plain')
+                return None, {}, {}
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
                     mimetype = Mimeview(self.env). \
                                mime_map.get(format_, 'text/plain')
                     req.send(g.render(self.dot_path, format_), mimetype)
+                    return None, {}, {}
                 else:
                     raise TracError(_("The %(format)s format is not allowed.",
                                       format=format_))
