@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html>
-# extends "layout.html"
+{% extends "layout.html" %}
 
-    <head>
-        <title>
-            # block title
-            #   if not milestone:
-            Dependency Graph {{ ticket }} {{ super() }}
-            # else :
-            Dependency Graph for milestone {{ milestone }} {{ super() }}
-            #   endif
-            # endblock title
-        </title>
-        # block head
-        #  set modify_perm = 'WIKI_MODIFY' in perm(page.resource)
-        #  set is_not_latest = page.exists and page.version != latest_version
+<head>
+    <title>
+        {% block title %}
+        {% if not milestone %}
+        Dependency Graph {{ ticket }} {{ super() }}
+        {% else %}
+        Dependency Graph for milestone {{ milestone }} {{ super() }}
+        {% endif %}
+        {% endblock title %}
+    </title>
+    {% block head %}
+    {% set modify_perm = 'WIKI_MODIFY' in perm(page.resource) %}
+    {% set is_not_latest = page.exists and page.version != latest_version %}
 
-        {{ super() }}
-    </head>
-    <body>
-        <div id="content">
-            # if milestone :
-                <h1>{{ _("Dependency Graph for milestone") }} {{ milestone }}</h1>
-                <img src="{{ href.depgraph('milestone', milestone, 'depgraph', summary=graph.label_summary, format=format) }}"
-                    alt="Dependency graph"
-                    usemap="{{ (not use_gs) and '#graph' or None }}"/>
-            # else :
-                <h1>{{ _("Dependency Graph for Ticket") }} {{ ticket }}</h1>
-                <img src="{{ href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format=format) }}"
-                    alt="Dependency graph"
-                    usemap="{{ (not use_gs) and '#graph' or None }}"/>
-            # endif
-            # if not use_gs :
-                    {{ Markup(graph_render('cmapx').decode('utf8')) }}
-            # endif
-        </div>
+    {{ super() }}
+    {% endblock head %}
+</head>
 
-        {{ super() }}
+<body>
+    <div id="content">
+        {% if milestone %}
+        <h1>{{ _("Dependency Graph for milestone") }} {{ milestone }}</h1>
+        <img src="{{ href.depgraph('milestone', milestone, 'depgraph', summary=graph.label_summary, format=format) }}"
+            alt="Dependency graph" usemap="{{ (not use_gs) and '#graph' or None }}" /> 
+        {% else %}
+        <h1>{{ _("Dependency Graph for Ticket") }} {{ ticket }}</h1>
+        <img src="{{ href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format=format) }}" 
+            alt="Dependency graph" usemap="{{ (not use_gs) and '#graph' or None }}" />
+        {% endif %}
+        {% if not use_gs %}
+        {{ Markup(graph_render('cmapx').decode('utf8')) }}
+        {% endif %}
+    </div>
 
-        {% endblock %}
-    </body>
+    {{ super() }}
+</body>
+
 </html>
