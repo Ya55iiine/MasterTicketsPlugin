@@ -216,7 +216,6 @@ class MasterTicketsModule(Component):
         req.perm.require('TICKET_VIEW')
         realm = req.args['realm']
         id_ = req.args['id']
-        data.update(Markup(req))
 
         if not which(self.dot_path):
             raise TracError(_("Path to dot executable is invalid: %(path)s",
@@ -261,7 +260,7 @@ class MasterTicketsModule(Component):
                         [TicketLinks(self.env, tkt_id) for tkt_id in tkt_ids]
                     ),
                     'text/plain')
-                return {'template': None, 'data': {}, 'metadata': {}} 
+                return None, {}, {}
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
                     mimetype = Mimeview(self.env). \
@@ -289,7 +288,8 @@ class MasterTicketsModule(Component):
             return None, {}, {}
         else:
             data = {}
-
+            data.update(Markup(req))
+            
             # Add a context link to enable/disable labels in nodes.
             if label_summary:
                 add_ctxtnav(req, 'Without labels',
