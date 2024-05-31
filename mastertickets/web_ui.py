@@ -17,7 +17,6 @@ import subprocess
 import textwrap
 import sys
 
-from trac.util.html import Markup
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
 from trac.core import Component, TracError, implements
 from trac.mimeview import Mimeview
