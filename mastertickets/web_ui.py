@@ -318,7 +318,7 @@ class MasterTicketsModule(Component):
 
     def _build_graph(self, req, tkt_ids, label_summary=0):
         # g = graphviz.Graph(log=self.log)
-        g = graphviz.Graph(name=self.log)
+        g = graphviz.Graph(name=str(self.log))
         g.label_summary = label_summary
 
         # g.attributes['rankdir'] = self.graph_direction
