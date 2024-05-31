@@ -288,7 +288,6 @@ class MasterTicketsModule(Component):
             return None, {}, {}
         else:
             data = {}
-            data.update(Markup(req))
             
             # Add a context link to enable/disable labels in nodes.
             if label_summary:
@@ -313,6 +312,7 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
+            data['html_content'] = Markup(graph_render('cmapx'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
