@@ -1,23 +1,19 @@
+# extends "layout.html"
 <!DOCTYPE html>
 <html>
-# extends "layout.html"
-
-    <head>
-        <title>
-            # block title
+    # block head
+        # block title
             #   if not milestone:
-            Dependency Graph  {{ super() }}
+                Dependency Graph  {{ super() }}
             # else :
-            Dependency Graph for milestone  {{ super() }}
+                Dependency Graph for milestone  {{ super() }}
             #   endif
-            # endblock title
-        </title>
-        # block head
+        # endblock title
         #  set modify_perm = 'WIKI_MODIFY' in perm(page.resource)
         #  set is_not_latest = page.exists and page.version != latest_version
-
         {{ super() }}
-    </head>
+    # endblock head
+    
     <body>
         <div id="content">
             # if milestone :
