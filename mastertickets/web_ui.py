@@ -216,6 +216,7 @@ class MasterTicketsModule(Component):
         req.perm.require('TICKET_VIEW')
         realm = req.args['realm']
         id_ = req.args['id']
+        data.update(Markup(req))
 
         if not which(self.dot_path):
             raise TracError(_("Path to dot executable is invalid: %(path)s",
