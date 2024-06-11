@@ -24,8 +24,7 @@ from trac.resource import ResourceNotFound, get_resource_summary
 from trac.ticket.model import Ticket
 from trac.ticket.query import Query
 from trac.util import as_int, to_unicode
-from trac.util.html import html, escape
-from markupsafe import Markup
+from trac.util.html import html, escape, Markup
 from trac.util.presentation import classes
 from trac.util.translation import _, tag_
 from trac.web.api import IRequestFilter, IRequestHandler
