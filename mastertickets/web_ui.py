@@ -17,6 +17,7 @@ import subprocess
 import textwrap
 import sys
 
+from functools import partial
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
 from trac.core import Component, TracError, implements
 from trac.mimeview import Mimeview
@@ -310,9 +311,9 @@ class MasterTicketsModule(Component):
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
-            data['graph_render'] = Markup(functools.partial(g.render, self.dot_path))
+            data['graph_render'] = Markup(partial(g.render, self.dot_path))
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(functools.partial(g.render, 'cmapx'))
+            data['html_content'] = Markup(partial(g.render, 'cmapx'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
