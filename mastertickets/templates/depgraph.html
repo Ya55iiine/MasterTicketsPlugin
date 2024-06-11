@@ -24,6 +24,7 @@
                 usemap=""/>
             ${ graph_render }
             ${ html_content }
+            ${Markup(graph_render('cmapx').decode('utf8'))}
         </div>
 
         ${ super() }
