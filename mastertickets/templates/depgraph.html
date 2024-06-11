@@ -24,7 +24,7 @@
                 usemap=""/>
             ${ graph_render }
             ${ html_content }
-            ${ graph_render('cmapx') }
+            ${ functools.partial(g.render, self.dot_path) }
         </div>
 
         ${ super() }
