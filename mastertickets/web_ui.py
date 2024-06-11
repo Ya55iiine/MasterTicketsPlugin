@@ -111,7 +111,7 @@ class MasterTicketsModule(Component):
                 for change in data.get('changes', {}):
                     if 'fields' not in change:
                         continue
-                    for field, field_data in change['fields'].iteritems():
+                    for field, field_data in change['fields'].items():
                         if field in self.fields:
                             if field_data['new'].strip():
                                 new = to_int_set(field_data['new'])
