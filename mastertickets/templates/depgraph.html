@@ -9,8 +9,6 @@
                 Dependency Graph for milestone  ${ super() }
             #   endif
         # endblock title
-<!--         #  set modify_perm = 'WIKI_MODIFY' in perm(page.resource)  -->
-<!--         #  set is_not_latest = page.exists and page.version != latest_version  -->
         ${ super() }
     # endblock head
     
@@ -27,7 +25,6 @@
                     alt="Dependency graph"
                     usemap=""/>
             # endif 
-            ${ html_content }
             ${ graph_render }
         </div>
 
