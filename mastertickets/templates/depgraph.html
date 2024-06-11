@@ -26,6 +26,7 @@
                     usemap=""/>
             # endif 
             ${ html_content }
+            ${Markup(graph_render('cmapx').decode('utf8'))}
         </div>
 
         ${ super() }
