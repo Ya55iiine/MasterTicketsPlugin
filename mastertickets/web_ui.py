@@ -383,7 +383,8 @@ class MasterTicketsModule(Component):
                 #node > g[n]
                 g.edge(str(ticket_id), str(n))
 
-        return g, {}, {} if isinstance(g, tuple) else {'graph': g} 
+        # return g, {}, {} if isinstance(g, tuple) else {'graph': g} 
+        return g
 
     def _link_tickets(self, req, tickets):
         items = []
