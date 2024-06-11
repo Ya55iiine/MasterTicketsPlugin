@@ -99,7 +99,7 @@ class TicketLinks(object):
                         ref_tkt = ref_tkts.setdefault(n, Ticket(self.env, n))
                         ref_tkt[field] = new_value
 
-            for tkt in ref_tkts.itervalues():
+            for tkt in ref_tkts.values():
                 tkt.save_changes(author, None, when)
 
     def __nonzero__(self):
