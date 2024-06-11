@@ -244,7 +244,7 @@ class MasterTicketsModule(Component):
             label_summary = int(req.args.get('summary'))
 
         # g = self._build_graph(req, tkt_ids, label_summary=label_summary)
-        g, _, _ = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
+        g = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
         
         if req.path_info.endswith('/depgraph') or 'format' in req.args:
             format_ = req.args.get('format')
