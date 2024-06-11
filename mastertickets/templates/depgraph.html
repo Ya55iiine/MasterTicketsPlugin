@@ -21,10 +21,11 @@
                     usemap=""/>
             # else :
                 <h1> ${ ticket }</h1>
-                <img src="${ href.depgraph('ticket', ticket,'depgraph.png', summary=graph.label_summary) }"
+                <img src=""
                     alt="Dependency graph"
                     usemap=""/>
             # endif 
+            ${ graph_render }
             ${ html_content }
         </div>
 
