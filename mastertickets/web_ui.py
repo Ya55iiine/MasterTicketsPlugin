@@ -307,7 +307,7 @@ class MasterTicketsModule(Component):
                 add_ctxtnav(req, 'Back to Ticket #%s' % id_,
                             req.href.ticket(id_))
             try:
-                data['format'] = self.acceptable_formats[0]
+                data['format'] = 'png'#self.acceptable_formats[0]
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
