@@ -26,7 +26,7 @@
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
-                ${(html_content)}
+                ${(Markup(graph_render('png').decode('utf8')))}
             # endif
         </div>
 
