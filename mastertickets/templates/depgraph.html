@@ -3,11 +3,11 @@
 <html>
     # block head
         # block title
-            #   if not milestone:
+            # if not milestone:
                 Dependency Graph  ${ super() }
             # else :
                 Dependency Graph for milestone  ${ super() }
-            #   endif
+            # endif
         # endblock title
         ${ super() }
     # endblock head
@@ -16,14 +16,18 @@
         <div id="content">
             # if milestone :
                 <h1> ${ milestone }</h1>
+                <img src="${href.depgraph('milestone', milestone, 'depgraph', summary=graph.label_summary, format=format)}"
+                     alt="Dependency graph"
+	                 usemap="${(not use_gs) and '#graph' or None}"/>
             # else :
                 <h1> ${ ticket }</h1>
+                <img src="${href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format=format)}"
+                     alt="Dependency graph"
+                     usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
-            <img src=""
-                alt="Dependency graph"
-                usemap=""/>
-            ${ graph_render }
-            ${ html_content }
+            # if not use_gs:
+                ${Markup(graph_render('cmapx').decode('utf8'))}
+            # endif
         </div>
 
         ${ super() }
