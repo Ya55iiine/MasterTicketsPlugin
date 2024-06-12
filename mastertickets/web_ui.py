@@ -311,9 +311,9 @@ class MasterTicketsModule(Component):
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
-            data['graph_render'] = partial(g.render, self.dot_path)
+            data['graph_render'] = Markup(partial(g.render, self.dot_path))
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(g.render(directory='doctest-output'))#(partial(g.render, 'cmapx'))
+            data['html_content'] = Markup(partial(g.render, 'cmapx'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
