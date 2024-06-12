@@ -313,7 +313,7 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(g.render('svg'))#.decode('utf8'))
+            data['html_content'] = Markup(g.render('png'))#.decode('utf8'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
