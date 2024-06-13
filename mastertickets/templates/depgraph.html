@@ -22,14 +22,14 @@
             # else :
                 <h1> ${ ticket }</h1>
 		<div id="graph-container"> ${ html_content | safe } </div>
-		<img src="href.depgraph(ticket.id, 'dot.svg')"
+		<img src="href.depgraph(ticket.id, 'dot.png')"
 		     height = 100px
 		     width = 100px
                      alt="Dependency graph"
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
-                ${ graph_render('svg') | safe }
+                ${ graph_render('png') | safe }
             # endif
         </div>
 
