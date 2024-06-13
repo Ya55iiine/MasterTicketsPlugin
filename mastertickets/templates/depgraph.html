@@ -18,11 +18,10 @@
                 <h1> ${ milestone }</h1>
                 <img src="${href.depgraph('milestone', milestone, 'depgraph', summary=graph.label_summary, format=format)}"
                      alt="Dependency graph"
-	                 usemap="${(not use_gs) and '#graph' or None}"/>
+	             usemap="${(not use_gs) and '#graph' or None}"/>
             # else :
                 <h1> ${ ticket }</h1>
-<!--                 <img src="${href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format=format)}" -->
-		<img src="${ html_content }"
+		<img src="${href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format=format)}"
                      alt="Dependency graph"
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
