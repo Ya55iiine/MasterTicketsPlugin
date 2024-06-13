@@ -310,13 +310,13 @@ class MasterTicketsModule(Component):
                 add_ctxtnav(req, 'Back to Ticket #%s' % id_,
                             req.href.ticket(id_))
             try:
-                data['format'] = 'png'#self.acceptable_formats[0]
+                data['format'] = 'cmapx'#self.acceptable_formats[0]
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
             data['graph_render'] = Markup(partial(g.render, self.dot_path))
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(partial(g.render, self.dot_path)('png'))#Markup(partial(g.render, 'svg'))
+            data['html_content'] = Markup(partial(g.render, self.dot_path)('cmapx'))#Markup(partial(g.render, 'svg'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
