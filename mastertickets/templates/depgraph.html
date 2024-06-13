@@ -21,6 +21,7 @@
 	             usemap="${(not use_gs) and '#graph' or None}"/>
             # else :
                 <h1> ${ ticket }</h1>
+		<div id="graph-container"> ${ html_content | safe } </div>
 		<img src="${href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format='svg')}"
 		     height = 100px
 		     width = 100px
