@@ -22,14 +22,14 @@
             # else :
                 <h1> ${ ticket }</h1>
 		<div id="graph-container"> ${ html_content | safe } </div>
-		<img src="${href.depgraph('ticket', ticket, 'depgraph', summary=graph.label_summary, format='svg')}"
+		<img src="${ url_for('static', filename='dot.svg') }"
 		     height = 100px
 		     width = 100px
                      alt="Dependency graph"
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
-                # include "~/svg/dot.pdf"
+                ${ html_content | safe }
             # endif
         </div>
 
