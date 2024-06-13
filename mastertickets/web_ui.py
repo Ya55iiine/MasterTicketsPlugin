@@ -316,7 +316,7 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = Markup(partial(g.render, self.dot_path))
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(partial(g.render, self.dot_path)('cmapx'))#Markup(partial(g.render, 'svg'))
+            data['html_content'] = Markup( g.render(directory='cmapx') )#Markup(partial(g.render, 'svg'))
 
             #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
