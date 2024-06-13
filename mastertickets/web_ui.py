@@ -320,10 +320,10 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
-            data['html_content'] = g.render(self.dot_path, 'svg') #Markup(partial(g.render, 'svg'))
+            data['html_content'] = Markup(g.render(self.dot_path, 'svg')) #Markup(partial(g.render, 'svg'))
 
             #return 'depgraph.html', data, None
-            return 'depgraph.html', data, {}
+            return 'depgraph.html', data, None
 
     def _build_graph(self, req, tkt_ids, label_summary=0):
         # g = graphviz.Graph(log=self.log)
