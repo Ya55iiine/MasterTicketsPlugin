@@ -292,7 +292,8 @@ class MasterTicketsModule(Component):
                     self.log.debug('MasterTickets: Error from gs: %s', err)
             else:
                 img = g.render(self.dot_path)
-            req.send(img, 'image/png')
+            # req.send(img, 'image/png')
+            req.send(img, 'image/svg+xml')
             # return None, {}, {}
         else:
             data = {}
