@@ -266,7 +266,10 @@ class MasterTicketsModule(Component):
                 if format_ in self.acceptable_formats:
                     mimetype = Mimeview(self.env). \
                                mime_map.get(format_, 'text/plain')
-                    req.send(g.render(self.dot_path, format_), mimetype)
+                    image_data = g.render(self.dot_path, format_)
+                    if isinstance(image_data, str):  # If it's a string, encode it
+                        image_data = image_data.encode('utf-8')
+                    req.send(image_data, mimetype)
                     return None, {}, {}
                 else:
                     raise TracError(_("The %(format)s format is not allowed.",
