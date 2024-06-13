@@ -16,6 +16,7 @@ import re
 import subprocess
 import textwrap
 import sys
+import base64
 
 from functools import partial
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
@@ -264,8 +265,7 @@ class MasterTicketsModule(Component):
                 # return None, {}, {}
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
-                    mimetype = Mimeview(self.env). \
-                               mime_map.get(format_, 'text/plain')
+                    mimetype = Mimeview(self.env).mime_map.get(format_, 'text/plain')
                     image_data = g.render(self.dot_path, format_)
                     if isinstance(image_data, str):  # If it's a string, encode it
                         image_data = image_data.encode('utf-8')
