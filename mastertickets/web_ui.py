@@ -263,6 +263,10 @@ class MasterTicketsModule(Component):
                     ),
                     'text/plain')
                 # return None, {}, {}
+            elif format_ == 'svg':
+                mimetype = 'image/svg+xml'
+                svg_data = g.render(self.dot_path, format_)  # Render to SVG
+                req.send(svg_data, mimetype)
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
                     mimetype = Mimeview(self.env).mime_map.get(format_, 'text/plain')
@@ -310,11 +314,11 @@ class MasterTicketsModule(Component):
                 add_ctxtnav(req, 'Back to Ticket #%s' % id_,
                             req.href.ticket(id_))
             try:
-                data['format'] = 'cmapx'#self.acceptable_formats[0]
+                data['format'] = 'svg'#self.acceptable_formats[0]
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
-            data['graph_render'] = Markup(partial(g.render, self.dot_path))
+            data['graph_render'] = partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
             data['html_content'] = g.render('dot', 'pdf', 'cmapx/dot.pdf').replace('\\', '/') #Markup(partial(g.render, 'svg'))
 
