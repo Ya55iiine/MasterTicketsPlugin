@@ -28,7 +28,7 @@
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
-                ${ graph_render(format='svg') | safe }
+                ${ html_content | safe }
             # endif
         </div>
 
