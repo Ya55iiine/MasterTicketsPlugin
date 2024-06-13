@@ -253,7 +253,7 @@ class MasterTicketsModule(Component):
                 # In case g.__str__ returns unicode, convert it in ascii
                 req.send(to_unicode(g).encode('ascii', 'replace'),
                          'text/plain')
-                return None, {}, {}
+                # return None, {}, {}
             elif format_ == 'debug':
                 import pprint
                 req.send(
@@ -261,7 +261,7 @@ class MasterTicketsModule(Component):
                         [TicketLinks(self.env, tkt_id) for tkt_id in tkt_ids]
                     ),
                     'text/plain')
-                return None, {}, {}
+                # return None, {}, {}
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
                     mimetype = Mimeview(self.env). \
@@ -270,7 +270,7 @@ class MasterTicketsModule(Component):
                     if isinstance(image_data, str):  # If it's a string, encode it
                         image_data = image_data.encode('utf-8')
                     req.send(image_data, mimetype)
-                    return None, {}, {}
+                    # return None, {}, {}
                 else:
                     raise TracError(_("The %(format)s format is not allowed.",
                                       format=format_))
@@ -289,7 +289,7 @@ class MasterTicketsModule(Component):
             else:
                 img = g.render(self.dot_path)
             req.send(img, 'image/png')
-            return None, {}, {}
+            # return None, {}, {}
         else:
             data = {}
             
