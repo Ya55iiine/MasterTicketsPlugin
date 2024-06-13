@@ -30,6 +30,8 @@
             # endif 
             # if not use_gs:
                 ${ graph_render('pdf') | safe }
+		# include 'dot.svg'
+		<img src="data:image/png;base64,{{ html_content }}" alt="My Graph">
             # endif
         </div>
 
