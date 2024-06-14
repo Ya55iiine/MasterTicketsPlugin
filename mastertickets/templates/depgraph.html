@@ -21,13 +21,12 @@
 	             usemap="${(not use_gs) and '#graph' or None}"/>
             # else :
                 <h1> ${ ticket }</h1>
-		<img src="href.depgraph(ticket.id, 'dot.png')"
+		<img src="/home/trac/graph-output/dot.svg"
                      alt="Dependency graph"
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
                 ${ svg_content | safe }
-		<img src="data:image/svg+xml;base64,${ svg_content }" alt="My Graph">
             # endif
         </div>
 
