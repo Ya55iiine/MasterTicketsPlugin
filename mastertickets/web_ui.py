@@ -197,7 +197,7 @@ class MasterTicketsModule(Component):
 
     def get_htdocs_dirs(self):
         from pkg_resources import resource_filename
-        return [('mastertickets', resource_filename(__name__, 'htdocs'))]
+        return [('trac.mastertickets', resource_filename(__name__, 'htdocs'))]
 
     def get_templates_dirs(self):
         from pkg_resources import resource_filename
