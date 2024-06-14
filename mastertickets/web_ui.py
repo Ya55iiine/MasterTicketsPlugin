@@ -315,14 +315,14 @@ class MasterTicketsModule(Component):
                 add_ctxtnav(req, 'Back to Ticket #%s' % id_,
                             req.href.ticket(id_))
             try:
-                data['format'] = 'png'#self.acceptable_formats[0]
+                data['format'] = 'svg'#self.acceptable_formats[0]
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
             data['graph_render'] = partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(g.render(filename='dot', format='png', cleanup=True)) #Markup(partial(g.render, 'svg'))
-            with open("/home/trac/graph-output/dot.png", "rb") as image_file:
+            data['html_content'] = Markup(g.render(filename='dot', format='svg', cleanup=True)) #Markup(partial(g.render, 'svg'))
+            with open("/home/trac/graph-output/dot.svg", "rb") as image_file:
                 data['png_content'] = base64.b64encode(image_file.read()).decode()
 
             #return 'depgraph.html', data, None
