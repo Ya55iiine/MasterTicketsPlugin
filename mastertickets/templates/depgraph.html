@@ -8,9 +8,9 @@
     # block content  
         <div id="content">
             # if milestone :
-                <h1> Dependency Graph for milestone ${ milestone }</h1>
+                <h1> Dependency Graph for ${ milestone }</h1>
             # else :
-                <h1> Dependency Graph ${ ticket }</h1>
+                <h1> Dependency Graph for ticket ${ ticket }</h1>
             # endif 
             # if not use_gs:
                 ${ svg_content | safe }
