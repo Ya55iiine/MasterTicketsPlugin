@@ -26,8 +26,8 @@
                      usemap="${(not use_gs) and '#graph' or None}"/>
             # endif 
             # if not use_gs:
-                ${ png_content | safe }
-		<img src="data:image/svg+xml;base64,${ png_content }" alt="My Graph">
+                ${ svg_content | safe }
+		<img src="data:image/svg+xml;base64,${ svg_content }" alt="My Graph">
             # endif
         </div>
 
