@@ -30,7 +30,7 @@
             # endif 
             # if not use_gs:
                 ${ graph_render('pdf') | safe }
-		<img src="data:image/png;base64,${ png_content }" alt="My Graph">
+		<img src="data:image/svg+xml;base64,${ png_content }" alt="My Graph">
             # endif
         </div>
 
