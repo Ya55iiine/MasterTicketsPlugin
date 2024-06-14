@@ -10,13 +10,13 @@
             # if milestone :
                 <h1> Dependency Graph for ${ milestone }</h1>
             # else :
-                <h1> Dependency Graph for ticket ${ ticket }</h1>
+                <h1> Dependency Graph for ticket ${ ticket } ${ ticket.summary }</h1>
             # endif 
             # if not use_gs:
                 ${ svg_content | safe }
             # endif
         </div>
-        <img src="img/key.png" />
+        <img src="/htdocs/img/key.png" />
         ${ super() }
     # endblock content
 </html>
