@@ -323,7 +323,6 @@ class MasterTicketsModule(Component):
             data['use_gs'] = self.use_gs
             data['html_content'] = Markup(g.render(filename='dot', format='svg', cleanup=True)) #Markup(partial(g.render, 'svg'))
             with open("/home/trac/graph-output/dot.svg", "r", encoding='utf-8') as image_file:
-                # data['png_content'] = base64.b64encode(image_file.read()).decode()
                 data['svg_content'] = image_file.read()
 
             #return 'depgraph.html', data, None
