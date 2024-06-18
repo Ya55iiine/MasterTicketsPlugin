@@ -19,7 +19,7 @@ from trac.util.translation import _
 def _format_options(base_string, options):
     return u'%s [%s]' \
            % (base_string,
-              u', '.join(u'%s="%s"' % x for x in options.iteritems()))
+              u', '.join(u'%s="%s"' % x for x in options.items()))
 
 
 class Edge(dict):
@@ -127,7 +127,7 @@ class Graph(object):
         process(self.edges)
 
         lines = [u'digraph "%s" {' % self.name]
-        for att, value in self.attributes.iteritems():
+        for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
         for obj in itertools.chain(nodes, edges):
             lines.append(u'\t%s;' % obj)
