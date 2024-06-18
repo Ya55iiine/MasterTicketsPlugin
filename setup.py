@@ -15,7 +15,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='TracMasterTickets',
-    version='4.0.5',
+    version='5.0.0',
     packages=find_packages(exclude=['*.tests']),
     package_data={
         'mastertickets': [
@@ -51,7 +51,7 @@ setup(
         'Programming Language :: Python',
     ],
 
-    install_requires=['Trac'],
+    install_requires=['Trac>=1.6'],
     test_suite='mastertickets.tests.suite',
     entry_points={
         'trac.plugins': [

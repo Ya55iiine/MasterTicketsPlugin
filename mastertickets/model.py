@@ -15,7 +15,7 @@ import datetime
 from trac.ticket.model import Ticket
 from trac.util.datefmt import utc, to_utimestamp
 
-from mastertickets.compat import to_list
+from trac.util import to_list
 
 
 class TicketLinks(object):
@@ -145,4 +145,4 @@ class TicketLinks(object):
                 visit(tid, memo1, lambda links: links.blocking)
                 visit(tid, memo2, lambda links: links.blocked_by)
         memo1.update(memo2)
-        return memo1.items()
+        return memo1.values()

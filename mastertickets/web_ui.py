@@ -10,15 +10,11 @@
 #
 
 import functools
-import graphviz
 import os
 import re
 import subprocess
 import textwrap
-import sys
-import base64
 
-from functools import partial
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
 from trac.core import Component, TracError, implements
 from trac.mimeview import Mimeview
@@ -26,14 +22,14 @@ from trac.resource import ResourceNotFound, get_resource_summary
 from trac.ticket.model import Ticket
 from trac.ticket.query import Query
 from trac.util import as_int, to_unicode
-from trac.util.html import html, escape, Markup
+from trac.util.html import html, escape
 from trac.util.presentation import classes
 from trac.util.translation import _, tag_
 from trac.web.api import IRequestFilter, IRequestHandler
 from trac.web.chrome import ITemplateProvider, add_ctxtnav, add_script
 
 from mastertickets.model import TicketLinks
-
+from mastertickets import graphviz
 
 class MasterTicketsModule(Component):
     """Provides support for ticket dependencies."""
@@ -83,7 +79,7 @@ class MasterTicketsModule(Component):
         doc="""Direction of the dependency graph (TD = Top Down,
             DT = Down Top, LR = Left Right, RL = Right Left).""")
 
-    fields = set(['blocking', 'blockedby'])
+    fields = {'blocking', 'blockedby'}
 
     # IRequestFilter methods
 
@@ -127,20 +123,54 @@ class MasterTicketsModule(Component):
                             elms = html()
                             if add:
                                 elms.append(
-                                    html.em(u', '.join(unicode(n)
-                                                       for n in sorted(add)))
+                                    html.em(', '.join([str(n) for n in sorted(add)]))
                                 )
-                                elms.append(u' added')
+                                elms.append(' added')
                             if add and sub:
-                                elms.append(u'; ')
+                                elms.append('; ')
                             if sub:
                                 elms.append(
-                                    html.em(u', '.join(unicode(n)
-                                                       for n in sorted(sub)))
+                                    html.em(', '.join([str(n) for n in sorted(sub)]))
                                 )
-                                elms.append(u' removed')
+                                elms.append(' removed')
                             field_data['rendered'] = elms
 
+            # Link ticket numbers for tickets.html
+            if template == 'ticket.html':
+                if 'fields' in data and isinstance(data['fields'], list):
+                    for field in data['fields']:
+                        for f in self.fields:
+                            if field['name'] == f and data['ticket'][f]:
+                                field['rendered'] = \
+                                    self._link_tickets(req, data['ticket'][f])
+
+            # For query_results.html and query.html
+            if template in ["query_results.html", "query.html"]:
+                if 'groups' in data and isinstance(data['groups'], list):
+                    for group, tickets in data['groups']:
+                        for ticket in tickets:
+                            for f in self.fields:
+                                if f in ticket:
+                                    ticket[f] = self._link_tickets(req, ticket[f])
+
+            # For report_view.html
+            if template == "report_view.html":
+                if 'row_groups' in data and isinstance(data['row_groups'], list):
+                    for group, rows in data['row_groups']:
+                        for row in rows:
+                            if 'cell_groups' in row and \
+                                    isinstance(row['cell_groups'], list):
+                                for cells in row['cell_groups']:
+                                    for cell in cells:
+                                        # If the user names column in the report
+                                        # differently (blockedby AS "blocked by")
+                                        # then this will not find it
+                                        if cell.get('header', {}).get('col') \
+                                                in self.fields:
+                                            cell['value'] = \
+                                                self._link_tickets(req,
+                                                                   cell['value'])
+            
             # Add a link to generate a dependency graph for all the tickets
             # in the milestone
             if req.path_info.startswith('/milestone/'):
@@ -154,50 +184,50 @@ class MasterTicketsModule(Component):
 
     # ITemplateStreamFilter methods
 
-    def filter_stream(self, req, method, filename, stream, data):
-        if not data:
-            return stream
+    # def filter_stream(self, req, method, filename, stream, data):
+    #     if not data:
+    #         return stream
 
-        # Try all at the same time to catch changed or processed templates.
-        if filename in ['report_view.html', 'query_results.html',
-                        'ticket.html', 'query.html']:
-            # For ticket.html
-            if 'fields' in data and isinstance(data['fields'], list):
-                for field in data['fields']:
-                    for f in self.fields:
-                        if field['name'] == f and data['ticket'][f]:
-                            field['rendered'] = \
-                                self._link_tickets(req, data['ticket'][f])
-            # For query_results.html and query.html
-            if 'groups' in data and isinstance(data['groups'], list):
-                for group, tickets in data['groups']:
-                    for ticket in tickets:
-                        for f in self.fields:
-                            if f in ticket:
-                                ticket[f] = self._link_tickets(req, ticket[f])
-            # For report_view.html
-            if 'row_groups' in data and isinstance(data['row_groups'], list):
-                for group, rows in data['row_groups']:
-                    for row in rows:
-                        if 'cell_groups' in row and \
-                                isinstance(row['cell_groups'], list):
-                            for cells in row['cell_groups']:
-                                for cell in cells:
-                                    # If the user names column in the report
-                                    # differently (blockedby AS "blocked by")
-                                    # then this will not find it
-                                    if cell.get('header', {}).get('col') \
-                                            in self.fields:
-                                        cell['value'] = \
-                                            self._link_tickets(req,
-                                                               cell['value'])
-        return stream
+    #     # Try all at the same time to catch changed or processed templates.
+    #     if filename in ['report_view.html', 'query_results.html',
+    #                     'ticket.html', 'query.html']:
+    #         # For ticket.html
+    #         if 'fields' in data and isinstance(data['fields'], list):
+    #             for field in data['fields']:
+    #                 for f in self.fields:
+    #                     if field['name'] == f and data['ticket'][f]:
+    #                         field['rendered'] = \
+    #                             self._link_tickets(req, data['ticket'][f])
+    #         # For query_results.html and query.html
+    #         if 'groups' in data and isinstance(data['groups'], list):
+    #             for group, tickets in data['groups']:
+    #                 for ticket in tickets:
+    #                     for f in self.fields:
+    #                         if f in ticket:
+    #                             ticket[f] = self._link_tickets(req, ticket[f])
+    #         # For report_view.html
+    #         if 'row_groups' in data and isinstance(data['row_groups'], list):
+    #             for group, rows in data['row_groups']:
+    #                 for row in rows:
+    #                     if 'cell_groups' in row and \
+    #                             isinstance(row['cell_groups'], list):
+    #                         for cells in row['cell_groups']:
+    #                             for cell in cells:
+    #                                 # If the user names column in the report
+    #                                 # differently (blockedby AS "blocked by")
+    #                                 # then this will not find it
+    #                                 if cell.get('header', {}).get('col') \
+    #                                         in self.fields:
+    #                                     cell['value'] = \
+    #                                         self._link_tickets(req,
+    #                                                            cell['value'])
+    #     return stream
 
     # ITemplateProvider methods
 
     def get_htdocs_dirs(self):
         from pkg_resources import resource_filename
-        return [('trac.mastertickets', resource_filename(__name__, 'htdocs'))]
+        return [('mastertickets', resource_filename(__name__, 'htdocs'))]
 
     def get_templates_dirs(self):
         from pkg_resources import resource_filename
@@ -245,16 +275,13 @@ class MasterTicketsModule(Component):
         if 'summary' in req.args:
             label_summary = int(req.args.get('summary'))
 
-        # g = self._build_graph(req, tkt_ids, label_summary=label_summary)
-        g = self._build_graph(req, tkt_ids, label_summary=label_summary)  # Unpack the tuple
-        
+        g = self._build_graph(req, tkt_ids, label_summary=label_summary)
         if req.path_info.endswith('/depgraph') or 'format' in req.args:
             format_ = req.args.get('format')
             if format_ == 'text':
                 # In case g.__str__ returns unicode, convert it in ascii
                 req.send(to_unicode(g).encode('ascii', 'replace'),
                          'text/plain')
-                # return None, {}, {}
             elif format_ == 'debug':
                 import pprint
                 req.send(
@@ -262,19 +289,11 @@ class MasterTicketsModule(Component):
                         [TicketLinks(self.env, tkt_id) for tkt_id in tkt_ids]
                     ),
                     'text/plain')
-                # return None, {}, {}
-            elif format_ == 'svg':
-                mimetype = 'image/svg+xml'
-                svg_data = g.render(self.dot_path, format_)  # Render to SVG
-                req.send(svg_data, mimetype)
             elif format_ is not None:
                 if format_ in self.acceptable_formats:
-                    mimetype = Mimeview(self.env).mime_map.get(format_, 'text/plain')
-                    image_data = g.render(self.dot_path, format_)
-                    if isinstance(image_data, str):  # If it's a string, encode it
-                        image_data = image_data.encode('utf-8')
-                    req.send(image_data, mimetype)
-                    # return None, {}, {}
+                    mimetype = Mimeview(self.env). \
+                               mime_map.get(format_, 'text/plain')
+                    req.send(g.render(self.dot_path, format_), mimetype)
                 else:
                     raise TracError(_("The %(format)s format is not allowed.",
                                       format=format_))
@@ -292,12 +311,10 @@ class MasterTicketsModule(Component):
                     self.log.debug('MasterTickets: Error from gs: %s', err)
             else:
                 img = g.render(self.dot_path)
-            # req.send(img, 'image/png')
-            req.send(img, 'image/svg+xml')
-            # return None, {}, {}
+            req.send(img, 'image/png')
         else:
             data = {}
-            
+
             # Add a context link to enable/disable labels in nodes.
             if label_summary:
                 add_ctxtnav(req, 'Without labels',
@@ -315,85 +332,61 @@ class MasterTicketsModule(Component):
                 add_ctxtnav(req, 'Back to Ticket #%s' % id_,
                             req.href.ticket(id_))
             try:
-                data['format'] = 'svg'#self.acceptable_formats[0]
+                data['format'] = self.acceptable_formats[0]
             except IndexError:
                 data['format'] = 'png'
             data['graph'] = g
-            data['graph_render'] = partial(g.render, self.dot_path)
+            data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
-            data['html_content'] = Markup(g.render(filename='dot', format='svg', cleanup=True)) #Markup(partial(g.render, 'svg'))
-            with open("/home/trac/graph-output/dot.svg", "r", encoding='utf-8') as image_file:
-                data['svg_content'] = image_file.read()
 
-            #return 'depgraph.html', data, None
             return 'depgraph.html', data, {}
 
     def _build_graph(self, req, tkt_ids, label_summary=0):
-        # g = graphviz.Graph(log=self.log)
-        g = graphviz.Graph(name=str(self.log), directory='graph-output')
+        g = graphviz.Graph(log=self.log)
         g.label_summary = label_summary
 
-        # g.attributes['rankdir'] = self.graph_direction
-        g.graph_attr['rankdir'] = self.graph_direction
+        g.attributes['rankdir'] = self.graph_direction
 
-        # node_default = g['node']
-        # node_default['style'] = 'filled'
-        g.node_attr['style'] = 'filled'
+        node_default = g['node']
+        node_default['style'] = 'filled'
 
-        # edge_default = g['edge']
-        # edge_default['style'] = ''
-        g.edge_attr['style'] = ''
+        edge_default = g['edge']
+        edge_default['style'] = ''
 
         # Force this to the top of the graph
-        # for tid in tkt_ids:
-        #     g.body[tid]
+        for tid in tkt_ids:
+            g[tid]
 
         if self.show_key:
-            # g[-1]['label'] = self.closed_text
-            # g[-1]['fillcolor'] = self.closed_color
-            # g[-1]['shape'] = 'box'
-            # g[-2]['label'] = self.opened_text
-            # g[-2]['fillcolor'] = self.opened_color
-            # g[-2]['shape'] = 'box'
-            g.node('key_closed', label=self.closed_text, fillcolor=self.closed_color, shape='box')
-            g.node('key_opened', label=self.opened_text, fillcolor=self.opened_color, shape='box')
-
+            g[-1]['label'] = self.closed_text
+            g[-1]['fillcolor'] = self.closed_color
+            g[-1]['shape'] = 'box'
+            g[-2]['label'] = self.opened_text
+            g[-2]['fillcolor'] = self.opened_color
+            g[-2]['shape'] = 'box'
 
         links = TicketLinks.walk_tickets(self.env, tkt_ids, self.full_graph)
-        # links = sorted(links)
-        links = sorted(links, key=lambda item: item[1].tkt.id)
-        for ticket_id, link in links:
-            #tkt = link.tkt
-            #node = g[link.tkt.id]
-            # node = g.node(str(ticket_id))
-            # if label_summary:
-            #     label = u'#%s %s' % (link.tkt.id, link.tkt['summary'])
-            # else:
-            #     label = u'#%s' % link.tkt.id
-            # node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
-            # node['fillcolor'] = tkt['status'] == 'closed' and \
-            #                     self.closed_color or self.opened_color
-            # node['URL'] = req.href.ticket(tkt.id)
-            # node['alt'] = u'Ticket #%s' % tkt.id
-            # node['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
-            #                                           tkt['summary']))
-            g.node(str(ticket_id), 
-               label= u'#%s %s' % (link.tkt.id, link.tkt['summary']) if label_summary 
-                      else u'#%s' % link.tkt.id,
-               fillcolor=self.closed_color if link.tkt['status'] == 'closed' else self.opened_color,
-               URL=req.href.ticket(link.tkt.id),
-               alt=u'Ticket #%s' % link.tkt.id,
-               tooltip=escape('#%s (%s) %s' % (link.tkt.id, link.tkt['status'], link.tkt['summary']))
-              )
-            if self.highlight_target and link.tkt.id in tkt_ids:
-                #node['penwidth'] = 3
-                g.node(str(ticket_id))['penwidth'] = 3
+        links = sorted(links, key=lambda link: link.tkt.id)
+        for link in links:
+            tkt = link.tkt
+            node = g[tkt.id]
+            if label_summary:
+                label = '#%s %s' % (tkt.id, tkt['summary'])
+            else:
+                label = '#%s' % tkt.id
+            node['label'] = escape('\n'.join(textwrap.wrap(label, 30)))
+            node['fillcolor'] = tkt['status'] == 'closed' and \
+                                self.closed_color or self.opened_color
+            node['URL'] = req.href.ticket(tkt.id)
+            node['alt'] = 'Ticket #%s' % tkt.id
+            node['tooltip'] = escape('#%s (%s) %s' % (tkt.id, tkt['status'],
+                                                      tkt['summary']))
+            if self.highlight_target and tkt.id in tkt_ids:
+                node['penwidth'] = 3
 
             for n in link.blocking:
-                #node > g[n]
-                g.edge(str(ticket_id), str(n))
+                node > g[n]
 
-        # return g, {}, {} if isinstance(g, tuple) else {'graph': g} 
         return g
 
     def _link_tickets(self, req, tickets):

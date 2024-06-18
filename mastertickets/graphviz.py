@@ -44,7 +44,7 @@ class Node(dict):
     """Model for a node in a dot graph."""
 
     def __init__(self, name, **kwargs):
-        self.name = str(name)
+        self.name = name
         self.edges = []
         dict.__init__(self, **kwargs)
 
@@ -91,7 +91,6 @@ class Graph(object):
             self.edges.append(obj)
 
     def __getitem__(self, key):
-        key = str(key)
         if key not in self._node_map:
             new_node = Node(key)
             self._node_map[key] = new_node
@@ -99,7 +98,6 @@ class Graph(object):
         return self._node_map[key]
 
     def __delitem__(self, key):
-        key = str(key)
         node = self._node_map.pop(key)
         self.nodes.remove(node)
 
@@ -158,4 +156,4 @@ if __name__ == '__main__':
 
     g.add(root)
 
-    print g.render()
+    print (g.render())

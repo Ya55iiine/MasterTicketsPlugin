@@ -1,22 +1,46 @@
-# extends "layout.html"
+# extends 'layout.html'
+
 <!DOCTYPE html>
 <html>
-    # block head
-        ${ super() }
-    # endblock head
-    
-    # block content  
-        <div id="content">
-            # if milestone :
-                <h1> Dependency Graph for ${ milestone }</h1>
-            # else :
-                <h1> Dependency Graph for ticket ${ ticket } ${ ticket.summary }</h1>
-            # endif 
-            # if not use_gs:
-                ${ svg_content | safe }
-            # endif
-        </div>
-        <img src="${href.chrome('/mastertickets/img/key.png')}" />
-        ${ super() }
+  <head>
+    <title>
+      # block title
+      #   if milestone:
+      Dependency Graph for Milestone ${milestone}
+      #   else:
+      Dependency Graph #${ticket}
+      #   endif
+      ${ super() }
+      # endblock title
+    </title>
+  </head>
+
+  <body>
+    # block content
+    <div id="content">
+      # if milestone
+      <h1>Dependency Graph for Milestone ${milestone}</h1>
+        <img src="${href.depgraph('milestone', milestone, 'depgraph',
+                          summary=graph.label_summary,
+                          format=format)}"
+             alt="Dependency graph"
+             usemap="${(not use_gs) and '#graph' or None}"/>
+
+      # else:
+      <h1>Dependency Graph for Ticket #${ticket}</h1>
+      <img src="${href.depgraph('ticket', ticket, 'depgraph',
+                           summary=graph.label_summary,
+                           format=format)}"
+           alt="Dependency graph"
+           usemap="${(not use_gs) and '#graph' or None}"/>
+
+      #endif
+
+      # if not use_gs:
+      ${graph_render('cmapx').decode("utf-8") | safe}
+      # endif
+    </div>
+    ${ super() }
     # endblock content
+  </body>
 </html>

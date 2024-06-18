@@ -17,7 +17,6 @@ from trac.env import IEnvironmentSetupParticipant
 from trac.ticket.api import ITicketChangeListener, ITicketManipulator
 from trac.ticket.model import Ticket
 
-from mastertickets import compat
 from mastertickets import db_default
 from mastertickets.model import TicketLinks
 
