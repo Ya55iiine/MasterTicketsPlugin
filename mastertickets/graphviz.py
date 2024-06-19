@@ -12,18 +12,13 @@
 import itertools
 import subprocess
 
-from trac.util.text import to_unicode
 from trac.util.translation import _
 
 
 def _format_options(base_string, options):
-    # return u'%s [%s]' % (
-    #     base_string,
-    #     u', '.join(u'%s="%s"' % x for x in options.items())
-    # )
     return u'%s [%s]' % (
         base_string,
-        u', '.join(u'%s="%s"' % (key, value) for key, value in options.items())
+        u', '.join(u'%s="%s"' % x for x in options.items())
     )
 
 class Edge(dict):
@@ -36,11 +31,8 @@ class Edge(dict):
 
     def __str__(self):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
-        # if self:
-        #     ret = _format_options(ret, self)
-        options = {k: v for k, v in self.items() if k not in ('source', 'dest')}
-        if options:
-            ret = _format_options(ret, options)
+        if self:
+            ret = _format_options(ret, self)
         return ret
 
     def __hash__(self):
@@ -57,14 +49,9 @@ class Node(dict):
 
     def __str__(self):
         ret = self.name
-        # if self:
-        #     ret = _format_options(ret, self)
-        # options = self.copy()  # Copy the attributes 
-        # if options:
-        #     ret = _format_options(ret, options)
-        # return ret
-        options_str = ', '.join(f'{key}="{value}"' for key, value in self.items())
-        return f'{self.name} [{options_str}]' if options_str else self.name
+        if self:
+            ret = _format_options(ret, self)
+        return ret
 
 
     def __gt__(self, other):
@@ -139,20 +126,11 @@ class Graph(object):
         process(self.nodes)
         process(self.edges)
 
-        # lines = [u'digraph "%s" {' % self.name]
-        # for att, value in self.attributes.items():
-        #     lines.append(u'\t%s="%s";' % (att, value))
-        # for obj in itertools.chain(nodes, edges):
-        #     lines.append(u'\t%s;' % obj)
-        # lines.append(u'}')
-        # return u'\n'.join(lines)
         lines = [u'digraph "%s" {' % self.name]
         for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
-        for node in nodes:  # Iterate through nodes
-            lines.append(u'\t%s;' % to_unicode(node))  # Convert node to string
-        for edge in edges:  # Iterate through edges
-            lines.append(u'\t%s;' % str(edge))  # Convert edge to string
+        for obj in itertools.chain(nodes, edges):
+            lines.append(u'\t%s;' % obj)
         lines.append(u'}')
         return u'\n'.join(lines)
         
@@ -164,8 +142,7 @@ class Graph(object):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              text = True)
-        # out, error = p.communicate(to_unicode(self).encode('utf8'))
-        out, error = p.communicate(str(self).__str__())
+        out, error = p.communicate(str(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
                                "%(rc)s: %(error)s", cmd=' '.join(cmd),
