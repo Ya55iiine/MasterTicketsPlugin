@@ -59,10 +59,13 @@ class Node(dict):
         ret = self.name
         # if self:
         #     ret = _format_options(ret, self)
-        options = self.copy()  # Copy the attributes 
-        if options:
-            ret = _format_options(ret, options)
-        return ret
+        # options = self.copy()  # Copy the attributes 
+        # if options:
+        #     ret = _format_options(ret, options)
+        # return ret
+        options_str = ', '.join(f'{key}="{value}"' for key, value in self.items())
+        return f'{self.name} [{options_str}]' if options_str else self.name
+
 
     def __gt__(self, other):
         """Allow node1 > node2 to add an edge."""
