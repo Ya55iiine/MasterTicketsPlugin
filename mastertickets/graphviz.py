@@ -32,11 +32,8 @@ class Edge(dict):
 
     def __str__(self):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
-        # if self:
-        #     ret = _format_options(ret, self)
-        options = {'source': self.source.name, 'dest': self.dest.name}
-        if options:
-            ret = _format_options(ret, options)
+        if self:
+            ret = _format_options(ret, self)
         return ret
 
     def __hash__(self):
@@ -53,11 +50,8 @@ class Node(dict):
 
     def __str__(self):
         ret = self.name
-        options = {'name': self.name} 
-        if options:
-            ret = _format_options(ret, options)
-        # if self:
-        #     ret = _format_options(ret, self)
+        if self:
+            ret = _format_options(ret, self)
         return ret
 
     def __gt__(self, other):
