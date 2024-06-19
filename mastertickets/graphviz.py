@@ -54,7 +54,6 @@ class Node(dict):
             ret = _format_options(ret, self)
         return ret
 
-
     def __gt__(self, other):
         """Allow node1 > node2 to add an edge."""
         edge = Edge(self, other)
@@ -140,8 +139,7 @@ class Graph(object):
         cmd = [dot_path, '-T%s' % format]
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             text = True)
+                             stderr=subprocess.PIPE)
         out, error = p.communicate(to_unicode(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
