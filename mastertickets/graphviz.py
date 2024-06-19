@@ -162,7 +162,8 @@ class Graph(object):
         cmd = [dot_path, '-T%s' % format]
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+                             stderr=subprocess.PIPE,
+                             text = True)
         # out, error = p.communicate(to_unicode(self).encode('utf8'))
         out, error = p.communicate(str(self).__str__())
         if self.log and error or p.returncode:
