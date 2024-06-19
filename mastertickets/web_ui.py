@@ -14,6 +14,7 @@ import os
 import re
 import subprocess
 import textwrap
+import base64
 
 from pkg_resources import resource_filename
 
@@ -297,7 +298,7 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
-            data['image'] = resource_filename(__name__, 'htdocs/img/key.png')
+            data['image'] = image_to_base64(resource_filename(__name__, 'htdocs/img/key.png'))
 
             return 'depgraph.html', data, {}
 
@@ -402,3 +403,11 @@ def which(program):
                 return exe_file
 
     return None
+
+def image_to_base64(image_path):
+    try:
+        with open(image_path, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+            return base64_image
+    except FileNotFoundError:
+        return None
