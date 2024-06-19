@@ -120,50 +120,29 @@ class TicketLinks(object):
                 l(getattr(self, 'blocked_by', [])))
 
     @staticmethod
-    # def walk_tickets(env, tkt_ids, full=False):
-    #     """Return an iterable of all links reachable directly above or
-    #     below those ones.
-    #     """
-
-    #     def visit(tkt, memo, next_fn):
-    #         if tkt in memo:
-    #             return False
-
-    #         links = TicketLinks(env, tkt)
-    #         memo[tkt] = links
-
-    #         for n in next_fn(links):
-    #             visit(n, memo, next_fn)
-
-    #     memo1 = {}
-    #     memo2 = {}
-    #     for tid in tkt_ids:
-    #         if full:
-    #             visit(tid, memo1, lambda links: links.blocking |
-    #                                            links.blocked_by)
-    #         else:
-    #             visit(tid, memo1, lambda links: links.blocking)
-    #             visit(tid, memo2, lambda links: links.blocked_by)
-    #     memo1.update(memo2)
-    #     return memo1.values()
-    def walk_tickets(env, tkt_ids):
-        """Return an iterable of all links reachable from the given
-        ticket IDs, regardless of direction.
+    def walk_tickets(env, tkt_ids, full=False):
+        """Return an iterable of all links reachable directly above or
+        below those ones.
         """
 
-        def visit(tkt, memo):
+        def visit(tkt, memo, next_fn):
             if tkt in memo:
                 return False
 
             links = TicketLinks(env, tkt)
             memo[tkt] = links
 
-            # Explore both blocking and blocked_by relationships
-            for n in links.blocking | links.blocked_by:  
-                visit(n, memo)
+            for n in next_fn(links):
+                visit(n, memo, next_fn)
 
-        memo = {}
+        memo1 = {}
+        memo2 = {}
         for tid in tkt_ids:
-            visit(tid, memo)
-
-        return memo.values()
+            if full:
+                visit(tid, memo1, lambda links: links.blocking |
+                                               links.blocked_by)
+            else:
+                visit(tid, memo1, lambda links: links.blocking)
+                visit(tid, memo2, lambda links: links.blocked_by)
+        memo1.update(memo2)
+        return memo1.values()
