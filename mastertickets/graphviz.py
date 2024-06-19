@@ -37,7 +37,7 @@ class Edge(dict):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
         # if self:
         #     ret = _format_options(ret, self)
-        options = {'source': self.source.name, 'dest': self.dest.name}
+        options = {str(k): str(v) for k, v in self.items()}
         if options:
             ret = _format_options(ret, options)
         return ret
@@ -58,7 +58,7 @@ class Node(dict):
         ret = self.name
         # if self:
         #     ret = _format_options(ret, self)
-        options = {'name': self.name}
+        options = {str(k): str(v) for k, v in self.items()}
         if options:
             ret = _format_options(ret, options)
         return ret
