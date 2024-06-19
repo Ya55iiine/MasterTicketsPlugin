@@ -150,7 +150,7 @@ class Graph(object):
         for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
         for node in nodes:  # Iterate through nodes
-            lines.append(u'\t%s;' % str(node))  # Convert node to string
+            lines.append(u'\t%s;' % to_unicode(node))  # Convert node to string
         for edge in edges:  # Iterate through edges
             lines.append(u'\t%s;' % str(edge))  # Convert edge to string
         lines.append(u'}')
