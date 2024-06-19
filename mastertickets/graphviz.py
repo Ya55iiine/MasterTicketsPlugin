@@ -12,8 +12,6 @@
 import itertools
 import subprocess
 
-from dataclasses import dataclass, field
-
 from trac.util.text import to_unicode
 from trac.util.translation import _
 
@@ -24,7 +22,6 @@ def _format_options(base_string, options):
               u', '.join(u'%s="%s"' % x for x in options.items()))
 
 
-@dataclass
 class Edge(dict):
     """Model for an edge in a dot graph."""
 
@@ -46,7 +43,6 @@ class Edge(dict):
         return hash(id(self))
 
 
-@dataclass
 class Node(dict):
     """Model for a node in a dot graph."""
 
