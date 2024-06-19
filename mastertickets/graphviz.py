@@ -136,11 +136,20 @@ class Graph(object):
         process(self.nodes)
         process(self.edges)
 
+        # lines = [u'digraph "%s" {' % self.name]
+        # for att, value in self.attributes.items():
+        #     lines.append(u'\t%s="%s";' % (att, value))
+        # for obj in itertools.chain(nodes, edges):
+        #     lines.append(u'\t%s;' % obj)
+        # lines.append(u'}')
+        # return u'\n'.join(lines)
         lines = [u'digraph "%s" {' % self.name]
         for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
-        for obj in itertools.chain(nodes, edges):
-            lines.append(u'\t%s;' % obj)
+        for node in nodes:  # Iterate through nodes
+            lines.append(u'\t%s;' % str(node))  # Convert node to string
+        for edge in edges:  # Iterate through edges
+            lines.append(u'\t%s;' % str(edge))  # Convert edge to string
         lines.append(u'}')
         return u'\n'.join(lines)
         
