@@ -153,15 +153,39 @@ class Graph(object):
         #     lines.append(u'\t%s;' % obj)
         # lines.append(u'}')
         # return u'\n'.join(lines)
+        edges = []
+        nodes = []
+
+        memo = set()
+
+        def process(lst):
+            for item in lst:
+                if item in memo:
+                    continue
+                memo.add(item)
+
+                if isinstance(item, Node):
+                    nodes.append(item)
+                    process(item.edges)
+                elif isinstance(item, Edge):
+                    edges.append(item)
+                    if isinstance(item.source, Node):
+                        process((item.source,))
+                    if isinstance(item.dest, Node):
+                        process((item.dest,))
+
+        process(self.nodes)
+        process(self.edges)
+
         lines = [f'digraph "{self.name}" {{']
         for att, value in self.attributes.items():
             lines.append(f'\t{att}="{value}";')
 
-        for node in self.nodes:
+        for node in nodes:  # Use nodes from the processed list
             node_attrs = ', '.join(f'{k}="{_handle_attribute_value(v)}"' for k, v in node.items())
             lines.append(f'\t"{node.name}" [{node_attrs}];')
 
-        for edge in self.edges:
+        for edge in edges:  # Use edges from the processed list
             edge_attrs = ', '.join(f'{k}="{_handle_attribute_value(v)}"' for k, v in edge.items() if k not in ('source', 'dest'))
             lines.append(f'\t"{edge.source.name}" -> "{edge.dest.name}" [{edge_attrs}];')
 
