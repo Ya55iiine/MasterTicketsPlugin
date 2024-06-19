@@ -15,6 +15,8 @@ import re
 import subprocess
 import textwrap
 
+from pkg_resources import resource_filename
+
 from trac.config import BoolOption, ChoiceOption, ListOption, Option
 from trac.core import Component, TracError, implements
 from trac.mimeview import Mimeview
@@ -185,11 +187,9 @@ class MasterTicketsModule(Component):
     # ITemplateProvider methods
 
     def get_htdocs_dirs(self):
-        from pkg_resources import resource_filename
         return [('mastertickets', resource_filename(__name__, 'htdocs'))]
 
     def get_templates_dirs(self):
-        from pkg_resources import resource_filename
         return [resource_filename(__name__, 'templates')]
 
     # IRequestHandler methods
@@ -297,6 +297,7 @@ class MasterTicketsModule(Component):
             data['graph'] = g
             data['graph_render'] = functools.partial(g.render, self.dot_path)
             data['use_gs'] = self.use_gs
+            data['image'] = resource_filename(__name__, 'htdocs/img/key.png')
 
             return 'depgraph.html', data, {}
 
