@@ -17,9 +17,10 @@ from trac.util.translation import _
 
 
 def _format_options(base_string, options):
-    return u'%s [%s]' \
-           % (base_string,
-              u', '.join(u'%s="%s"' % x for x in options.items()))
+    return u'%s [%s]' % (
+        base_string,
+        u', '.join(u'%s="%s"' % (key, value) for key, value in options.items())
+    )
 
 
 class Edge(dict):
