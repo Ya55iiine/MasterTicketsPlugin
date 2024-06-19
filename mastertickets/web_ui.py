@@ -182,47 +182,6 @@ class MasterTicketsModule(Component):
 
         return template, data, content_type
 
-    # ITemplateStreamFilter methods
-
-    # def filter_stream(self, req, method, filename, stream, data):
-    #     if not data:
-    #         return stream
-
-    #     # Try all at the same time to catch changed or processed templates.
-    #     if filename in ['report_view.html', 'query_results.html',
-    #                     'ticket.html', 'query.html']:
-    #         # For ticket.html
-    #         if 'fields' in data and isinstance(data['fields'], list):
-    #             for field in data['fields']:
-    #                 for f in self.fields:
-    #                     if field['name'] == f and data['ticket'][f]:
-    #                         field['rendered'] = \
-    #                             self._link_tickets(req, data['ticket'][f])
-    #         # For query_results.html and query.html
-    #         if 'groups' in data and isinstance(data['groups'], list):
-    #             for group, tickets in data['groups']:
-    #                 for ticket in tickets:
-    #                     for f in self.fields:
-    #                         if f in ticket:
-    #                             ticket[f] = self._link_tickets(req, ticket[f])
-    #         # For report_view.html
-    #         if 'row_groups' in data and isinstance(data['row_groups'], list):
-    #             for group, rows in data['row_groups']:
-    #                 for row in rows:
-    #                     if 'cell_groups' in row and \
-    #                             isinstance(row['cell_groups'], list):
-    #                         for cells in row['cell_groups']:
-    #                             for cell in cells:
-    #                                 # If the user names column in the report
-    #                                 # differently (blockedby AS "blocked by")
-    #                                 # then this will not find it
-    #                                 if cell.get('header', {}).get('col') \
-    #                                         in self.fields:
-    #                                     cell['value'] = \
-    #                                         self._link_tickets(req,
-    #                                                            cell['value'])
-    #     return stream
-
     # ITemplateProvider methods
 
     def get_htdocs_dirs(self):
