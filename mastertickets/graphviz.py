@@ -28,12 +28,14 @@ def _handle_attribute_value(value):
     """Handles converting different attribute values to strings."""
     if isinstance(value, str):
         return value  # Already a string, no conversion needed
-    elif isinstance(value, (int, float)):
-        return str(value)  # Convert numbers to strings
+    elif hasattr(value, 'iteritems'):
+        # Assume it's a dictionary-like object, format as key-value pairs
+        return ', '.join(f'{k}={_handle_attribute_value(v)}' for k, v in value.iteritems())
+    elif isinstance(value, (list, tuple)):
+        # Handle lists and tuples by recursively formatting elements
+        return ', '.join(_handle_attribute_value(v) for v in value)
     else:
-        # Handle other data types as needed (e.g., lists, tuples)
-        # For now, convert to a string representation
-        return repr(value) 
+        return repr(value)
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
