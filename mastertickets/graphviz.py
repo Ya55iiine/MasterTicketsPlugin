@@ -17,10 +17,12 @@ from trac.util.translation import _
 
 
 def _format_options(base_string, options):
-    return u'%s [%s]' % (
-        base_string,
-        u', '.join(u'%s="%s"' % (key, value) for key, value in options.items())
-    )
+    # return u'%s [%s]' % (
+    #     base_string,
+    #     u', '.join(u'%s="%s"' % x for x in options.items())
+    # )
+    formatted_options = ', '.join(f'{key}="{value}"' for key, value in options.items())
+    return f'{base_string} [{formatted_options}]' 
 
 
 class Edge(dict):
@@ -33,8 +35,11 @@ class Edge(dict):
 
     def __str__(self):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
-        if self:
-            ret = _format_options(ret, self)
+        # if self:
+        #     ret = _format_options(ret, self)
+        options = {'source': self.source.name, 'dest': self.dest.name}
+        if options:
+            ret = _format_options(ret, options)
         return ret
 
     def __hash__(self):
@@ -51,8 +56,11 @@ class Node(dict):
 
     def __str__(self):
         ret = self.name
-        if self:
-            ret = _format_options(ret, self)
+        # if self:
+        #     ret = _format_options(ret, self)
+        options = {'name': self.name}
+        if options:
+            ret = _format_options(ret, options)
         return ret
 
     def __gt__(self, other):
