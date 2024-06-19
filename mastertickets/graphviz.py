@@ -36,8 +36,11 @@ class Edge(dict):
 
     def __str__(self):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
-        if self:
-            ret = _format_options(ret, self)
+        # if self:
+        #     ret = _format_options(ret, self)
+        options = {k: v for k, v in self.items() if k not in ('source', 'dest')}
+        if options:
+            ret = _format_options(ret, options)
         return ret
 
     def __hash__(self):
@@ -54,8 +57,11 @@ class Node(dict):
 
     def __str__(self):
         ret = self.name
-        if self:
-            ret = _format_options(ret, self)
+        # if self:
+        #     ret = _format_options(ret, self)
+        options = self.copy()  # Copy the attributes 
+        if options:
+            ret = _format_options(ret, options)
         return ret
 
     def __gt__(self, other):
