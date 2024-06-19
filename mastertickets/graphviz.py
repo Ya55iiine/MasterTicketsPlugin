@@ -17,25 +17,10 @@ from trac.util.translation import _
 
 
 def _format_options(base_string, options):
-    # return u'%s [%s]' % (
-    #     base_string,
-    #     u', '.join(u'%s="%s"' % x for x in options.items())
-    # )
-    formatted_options = ', '.join(f'{key}=\"{value}\"' for key, value in options.items())
-    return f'{base_string} [{formatted_options}]' 
-
-def _handle_attribute_value(value):
-    """Handles converting different attribute values to strings."""
-    if isinstance(value, str):
-        return value  # Already a string, no conversion needed
-    elif hasattr(value, 'iteritems'):
-        # Assume it's a dictionary-like object, format as key-value pairs
-        return ', '.join(f'{k}={_handle_attribute_value(v)}' for k, v in value.iteritems())
-    elif isinstance(value, (list, tuple)):
-        # Handle lists and tuples by recursively formatting elements
-        return ', '.join(_handle_attribute_value(v) for v in value)
-    else:
-        return repr(value)
+    return u'%s [%s]' % (
+        base_string,
+        u', '.join(u'%s="%s"' % x for x in options.items())
+    )
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
@@ -46,13 +31,9 @@ class Edge(dict):
         dict.__init__(self, **kwargs)
 
     def __str__(self):
-        # ret = u'%s -> %s' % (self.source.name, self.dest.name)
-        # if self:
-        #     ret = _format_options(ret, self)
-        ret = f'{self.source.name} -> {self.dest.name}'
-        options = {str(k): _handle_attribute_value(v) for k, v in self.items()}
-        if options:
-            ret = _format_options(ret, options)
+        ret = u'%s -> %s' % (self.source.name, self.dest.name)
+        if self:
+            ret = _format_options(ret, self)
         return ret
 
     def __hash__(self):
@@ -69,11 +50,8 @@ class Node(dict):
 
     def __str__(self):
         ret = self.name
-        # if self:
-        #     ret = _format_options(ret, self)
-        options = {str(k): _handle_attribute_value(v) for k, v in self.items()} 
-        if options:
-            ret = _format_options(ret, options)
+        if self:
+            ret = _format_options(ret, self)
         return ret
 
     def __gt__(self, other):
@@ -124,37 +102,6 @@ class Graph(object):
         self.nodes.remove(node)
 
     def __str__(self):
-        # edges = []
-        # nodes = []
-
-        # memo = set()
-
-        # def process(lst):
-        #     for item in lst:
-        #         if item in memo:
-        #             continue
-        #         memo.add(item)
-
-        #         if isinstance(item, Node):
-        #             nodes.append(item)
-        #             process(item.edges)
-        #         elif isinstance(item, Edge):
-        #             edges.append(item)
-        #             if isinstance(item.source, Node):
-        #                 process((item.source,))
-        #             if isinstance(item.dest, Node):
-        #                 process((item.dest,))
-
-        # process(self.nodes)
-        # process(self.edges)
-
-        # lines = [u'digraph "%s" {' % self.name]
-        # for att, value in self.attributes.items():
-        #     lines.append(u'\t%s="%s";' % (att, value))
-        # for obj in itertools.chain(nodes, edges):
-        #     lines.append(u'\t%s;' % obj)
-        # lines.append(u'}')
-        # return u'\n'.join(lines)
         edges = []
         nodes = []
 
@@ -179,20 +126,14 @@ class Graph(object):
         process(self.nodes)
         process(self.edges)
 
-        lines = [f'digraph "{self.name}" {{']
+        lines = [u'digraph "%s" {' % self.name]
         for att, value in self.attributes.items():
-            lines.append(f'\t{att}="{value}";')
-
-        for node in nodes:  # Use nodes from the processed list
-            node_attrs = ', '.join(f'{k}="{_handle_attribute_value(v)}"' for k, v in node.items())
-            lines.append(f'\t"{node.name}" [{node_attrs}];')
-
-        for edge in edges:  # Use edges from the processed list
-            edge_attrs = ', '.join(f'{k}="{_handle_attribute_value(v)}"' for k, v in edge.items() if k not in ('source', 'dest'))
-            lines.append(f'\t"{edge.source.name}" -> "{edge.dest.name}" [{edge_attrs}];')
-
-        lines.append('}')
-        return '\n'.join(lines)
+            lines.append(u'\t%s="%s";' % (att, value))
+        for obj in itertools.chain(nodes, edges):
+            lines.append(u'\t%s;' % obj)
+        lines.append(u'}')
+        return u'\n'.join(lines)
+        
 
     def render(self, dot_path='dot', format='png'):
         """Render a dot graph."""
