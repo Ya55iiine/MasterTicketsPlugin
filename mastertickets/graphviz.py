@@ -52,7 +52,7 @@ class Node(dict):
 
     def __init__(self, name, **kwargs):
         self.name = name
-        self.edges = field(default_factory=list) #[]
+        self.edges = []
         dict.__init__(self, **kwargs)
 
     def __str__(self):
