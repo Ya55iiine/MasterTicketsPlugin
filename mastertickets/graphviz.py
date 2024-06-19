@@ -21,9 +21,19 @@ def _format_options(base_string, options):
     #     base_string,
     #     u', '.join(u'%s="%s"' % x for x in options.items())
     # )
-    formatted_options = ', '.join(f'{key}="{value}"' for key, value in options.items())
+    formatted_options = ', '.join(f'{key}=\"{value}\"' for key, value in options.items())
     return f'{base_string} [{formatted_options}]' 
 
+def _handle_attribute_value(value):
+    """Handles converting different attribute values to strings."""
+    if isinstance(value, str):
+        return value  # Already a string, no conversion needed
+    elif isinstance(value, (int, float)):
+        return str(value)  # Convert numbers to strings
+    else:
+        # Handle other data types as needed (e.g., lists, tuples)
+        # For now, convert to a string representation
+        return repr(value) 
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
@@ -37,7 +47,7 @@ class Edge(dict):
         ret = u'%s -> %s' % (self.source.name, self.dest.name)
         # if self:
         #     ret = _format_options(ret, self)
-        options = {str(k): str(v) for k, v in self.items()}
+        options = {str(k): _handle_attribute_value(v) for k, v in self.items()}
         if options:
             ret = _format_options(ret, options)
         return ret
@@ -58,7 +68,7 @@ class Node(dict):
         ret = self.name
         # if self:
         #     ret = _format_options(ret, self)
-        options = {str(k): str(v) for k, v in self.items()}
+        options = {str(k): _handle_attribute_value(v) for k, v in self.items()} 
         if options:
             ret = _format_options(ret, options)
         return ret
