@@ -12,6 +12,7 @@
 import itertools
 import subprocess
 
+from trac.util.text import to_unicode
 from trac.util.translation import _
 
 
@@ -133,7 +134,6 @@ class Graph(object):
             lines.append(u'\t%s;' % obj)
         lines.append(u'}')
         return u'\n'.join(lines)
-        
 
     def render(self, dot_path='dot', format='png'):
         """Render a dot graph."""
@@ -142,7 +142,7 @@ class Graph(object):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              text = True)
-        out, error = p.communicate(str(self).encode('utf8'))
+        out, error = p.communicate(to_unicode(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
                                "%(rc)s: %(error)s", cmd=' '.join(cmd),
