@@ -44,9 +44,10 @@ class Edge(dict):
         dict.__init__(self, **kwargs)
 
     def __str__(self):
-        ret = u'%s -> %s' % (self.source.name, self.dest.name)
+        # ret = u'%s -> %s' % (self.source.name, self.dest.name)
         # if self:
         #     ret = _format_options(ret, self)
+        ret = f'{self.source.name} -> {self.dest.name}'
         options = {str(k): _handle_attribute_value(v) for k, v in self.items()}
         if options:
             ret = _format_options(ret, options)
