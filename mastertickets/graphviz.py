@@ -130,7 +130,7 @@ class Graph(object):
         for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
         for obj in itertools.chain(nodes, edges):
-            lines.append(u'\t%s;' % obj)
+            lines.append(u'\t%s;' % str(obj))
         lines.append(u'}')
         return u'\n'.join(lines)
 
