@@ -15,15 +15,10 @@ import subprocess
 from trac.util.translation import _
 
 
-# def _format_options(base_string, options):
-#     return u'%s [%s]' % (
-#         base_string,
-#         u', '.join(u'%s="%s"' % x for x in options.items())
-#     )
 def _format_options(base_string, options):
-    return f'%s [%s]' % (
+    return u'%s [%s]' % (
         base_string,
-        f', '.join(f'%s="%s"' % x for x in options.items())
+        u', '.join([u'%s="%s"' % x for x in options.items()])
     )
 
 class Edge(dict):
@@ -58,7 +53,6 @@ class Node(dict):
             ret = _format_options(ret, self)
         return ret
     
-
     def __gt__(self, other):
         """Allow node1 > node2 to add an edge."""
         edge = Edge(self, other)
