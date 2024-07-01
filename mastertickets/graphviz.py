@@ -139,7 +139,6 @@ class Graph(object):
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        print(self)
         out, error = p.communicate(str(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
