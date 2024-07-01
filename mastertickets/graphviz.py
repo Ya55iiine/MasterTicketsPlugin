@@ -20,12 +20,11 @@ from trac.util.translation import _
 #         base_string,
 #         u', '.join(u'%s="%s"' % x for x in options.items())
 #     )
-
 def _format_options(base_string, options):
-    if not options:  # Handle empty options
-        return base_string
-    formatted_options = ', '.join(f'{key}="{value}"' for key, value in options.items())
-    return f'{base_string} [{formatted_options}]'
+    return f'%s [%s]' % (
+        base_string,
+        f', '.join(f'%s="%s"' % x for x in options.items())
+    )
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
@@ -53,18 +52,12 @@ class Node(dict):
         self.edges = []
         dict.__init__(self, **kwargs)
 
-    # def __str__(self):
-    #     ret = self.name
-    #     print self
-    #     if self:
-    #         ret = _format_options(ret, self)
-    #     return ret
-    
     def __str__(self):
-        ret = str(self.name)  # Ensure name is a string
-        if self.options:  # Assuming you have an 'options' attribute that's a dictionary
-            ret = _format_options(ret, self.options)
+        ret = self.name
+        if self:
+            ret = _format_options(ret, self)
         return ret
+    
 
     def __gt__(self, other):
         """Allow node1 > node2 to add an edge."""
