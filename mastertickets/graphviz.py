@@ -61,6 +61,7 @@ class Node(dict):
     #     return ret
     
     def __str__(self):
+        print(self)
         ret = str(self.name)  # Ensure name is a string
         if self.options:  # Assuming you have an 'options' attribute that's a dictionary
             ret = _format_options(ret, self.options)
