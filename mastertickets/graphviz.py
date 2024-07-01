@@ -61,7 +61,6 @@ class Node(dict):
     #     return ret
     
     def __str__(self):
-        print(self)
         ret = str(self.name)  # Ensure name is a string
         if self.options:  # Assuming you have an 'options' attribute that's a dictionary
             ret = _format_options(ret, self.options)
@@ -153,6 +152,7 @@ class Graph(object):
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
+        print(self)
         out, error = p.communicate(str(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
