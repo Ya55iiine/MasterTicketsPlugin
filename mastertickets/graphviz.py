@@ -43,7 +43,7 @@ class Node(dict):
     """Model for a node in a dot graph."""
 
     def __init__(self, name, **kwargs):
-        self.name = name
+        self.name = str(name)
         self.edges = []
         dict.__init__(self, **kwargs)
 
