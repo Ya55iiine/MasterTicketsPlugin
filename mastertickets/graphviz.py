@@ -16,18 +16,18 @@ from trac.util.text import to_unicode
 from trac.util.translation import _
 
 
-# def _format_options(base_string, options):
-#     return u'%s [%s]' % (
-#         base_string,
-#         u', '.join(u'%s="%s"' % x for x in options.items())
-#     )
-
 def _format_options(base_string, options):
-    formatted_options = ', '.join(
-        f'{str(key)}="{str(value)}"'
-        for key, value in options.items()
+    return u'%s [%s]' % (
+        base_string,
+        u', '.join(u'%s="%s"' % x for x in options.items())
     )
-    return f'{str(base_string)} [{formatted_options}]'
+
+# def _format_options(base_string, options):
+#     formatted_options = ', '.join(
+#         f'{str(key)}="{str(value)}"'
+#         for key, value in options.items()
+#     )
+#     return f'{str(base_string)} [{formatted_options}]'
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
@@ -147,7 +147,7 @@ class Graph(object):
         p = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
-        out, error = p.communicate(to_unicode(self).encode('utf8'))
+        out, error = p.communicate(str(self).encode('utf8'))
         if self.log and error or p.returncode:
             self.log.warning(_("dot command '%(cmd)s' failed with code "
                                "%(rc)s: %(error)s", cmd=' '.join(cmd),
