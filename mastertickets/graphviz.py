@@ -16,11 +16,18 @@ from trac.util.text import to_unicode
 from trac.util.translation import _
 
 
+# def _format_options(base_string, options):
+#     return u'%s [%s]' % (
+#         base_string,
+#         u', '.join(u'%s="%s"' % x for x in options.items())
+#     )
+
 def _format_options(base_string, options):
-    return u'%s [%s]' % (
-        base_string,
-        u', '.join(u'%s="%s"' % x for x in options.items())
+    formatted_options = ', '.join(
+        f'{str(key)}="{str(value)}"'
+        for key, value in options.items()
     )
+    return f'{str(base_string)} [{formatted_options}]'
 
 class Edge(dict):
     """Model for an edge in a dot graph."""
@@ -130,7 +137,7 @@ class Graph(object):
         for att, value in self.attributes.items():
             lines.append(u'\t%s="%s";' % (att, value))
         for obj in itertools.chain(nodes, edges):
-            lines.append(u'\t%s;' % str(obj.to_string()))
+            lines.append(u'\t%s;' % str(obj))
         lines.append(u'}')
         return u'\n'.join(lines)
 
